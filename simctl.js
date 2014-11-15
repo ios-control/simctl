@@ -22,6 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+var shell = require('shelljs'),
+    path = require('path'),
+    util = require('util');
+
 exports = module.exports = {
     
     set noxpc(b) {
@@ -38,47 +42,58 @@ exports = module.exports = {
     },
     
     create : function(name, device_type_id, runtime_id) {
-        // TODO:
+        var command = util.format('xcrun simctl create "%s" "%s" "%s"', name, device_type_id, runtime_id);
+        return shell.exec(command);
     },
     
     del : function(device) {
-        // TODO:
+        var command = util.format('xcrun simctl delete "%s"', device);
+        return shell.exec(command);
     },
     
     erase : function(device) {
-        // TODO:
+        var command = util.format('xcrun simctl erase "%s"', device);
+        return shell.exec(command);
     },
     
     boot : function(device) {
-        // TODO:
+        var command = util.format('xcrun simctl boot "%s"', device);
+        return shell.exec(command);
     },
     
     shutdown : function(device) {
-        // TODO:
+        var command = util.format('xcrun simctl shutdown "%s"', device);
+        return shell.exec(command);
     },
     
     rename : function(device, name) {
-        // TODO:
+        var command = util.format('xcrun simctl rename "%s" "%s"', device, name);
+        return shell.exec(command);
     },
     
     getenv : function(device, variable_name) {
-        // TODO:
+        var command = util.format('xcrun simctl getenv "%s" "%s"', device, variable_name);
+        return shell.exec(command);
     },
     
     openurl : function(device, url) {
-        // TODO:
+        var command = util.format('xcrun simctl openurl "%s" "%s"', device, url);
+        return shell.exec(command);
     },
     
     addphoto : function(device, path) {
-        // TODO:
+        var command = util.format('xcrun simctl addphoto "%s" "%s"', device, path);
+        return shell.exec(command);
     },
     
     install : function(device, path) {
-        // TODO:
+        var command = util.format('xcrun simctl install "%s" "%s"', device, path);
+        return shell.exec(command);
     },
     
     uninstall : function(device, app_identifier) {
-        // TODO:
+        var command = util.format('xcrun simctl uninstall "%s" "%s"', device, app_identifier);
+        return shell.exec(command);
     },
     
     launch : function(wait_for_debugger, device, app_identifier, argv) {

@@ -7,6 +7,9 @@
     "url": "https://github.com/shazron/simctl.git"
   },
   "main": "simctl.js",
+  "dependencies": {
+      "shelljs": "^0.2.6"
+  },  
   "keywords": [
     "simctl",
     "iOS Simulator"
