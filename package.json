@@ -1,0 +1,16 @@
+{
+  "name": "simctl",
+  "version": "0.0.1",
+  "description": "library for Xcode simctl utility on OS X",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shazron/simctl.git"
+  },
+  "main": "simctl.js",
+  "keywords": [
+    "simctl",
+    "iOS Simulator"
+  ],
+  "author": "Shazron Abdullah",
+  "license": "MIT"
+}
