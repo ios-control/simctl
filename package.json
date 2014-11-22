@@ -1,6 +1,6 @@
 {
   "name": "simctl",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "library for Xcode simctl utility on OS X",
   "repository": {
     "type": "git",

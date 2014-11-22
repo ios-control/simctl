@@ -37,8 +37,18 @@ exports = module.exports = {
     },
     
     check_prerequisites : function() {
-        // TODO:
-        return false;
+        var command = util.format('xcrun simctl help');
+        var obj = shell.exec(command);
+
+        if (obj.code !== 0) {
+            obj.output  = 'simctl was not found.\n';
+            obj.output += 'Check that you have Xcode 6.x installed:\n';
+            obj.output += '\txcodebuild --version';
+            obj.output += 'Check that you have Xcode 6.x selected:\n';
+            obj.output += '\txcode-select --print-path';
+        }
+        
+        return obj;
     },
     
     create : function(name, device_type_id, runtime_id) {
@@ -97,27 +107,70 @@ exports = module.exports = {
     },
     
     launch : function(wait_for_debugger, device, app_identifier, argv) {
-        // TODO:
+        var wait_flag = '';
+        if (wait_for_debugger) {
+            wait_flag = '--wait-for-debugger';
+        }
+        
+        var argv_expanded = '';
+        if (argv.length > 0) {
+            argv_expanded = argv.map(function(arg){
+                return "'" + arg + "'";
+            }).join(" "); 
+        }
+        
+        var command = util.format('xcrun simctl launch %s "%s" "%s" %s', wait_flag, device, app_identifier, argv_expanded);
+        return shell.exec(command);
     },
     
     spawn : function(wait_for_debugger, arch, device, path_to_executable, argv) {
-        // TODO:
+        var wait_flag = '';
+        if (wait_for_debugger) {
+            wait_flag = '--wait-for-debugger';
+        }
+
+        var arch_flag = '';
+        if (arch) {
+            arch_flag = util.format('--arch="%s"', arch);
+        }
+        
+        var argv_expanded = '';
+        if (argv.length > 0) {
+            argv_expanded = argv.map(function(arg){
+                return "'" + arg + "'";
+            }).join(" "); 
+        }
+        
+        var command = util.format('xcrun simctl spawn %s %s "%s" "%s" %s', wait_flag, arch_flag, device, path_to_executable, argv_expanded);
+        return shell.exec(command);
     },
     
     list : function(show_devices, show_device_types, show_runtimes) {
-        // TODO:
+        var sublist = '';
+        if (show_devices) {
+            sublist = 'devices';
+        } else if (show_device_types) {
+            sublist = 'device_types';
+        } else if (show_runtimes) {
+            sublist = 'runtimes';
+        }
+        
+        var command = util.format('xcrun simctl list %s', sublist);
+        return shell.exec(command);
     },
     
     notify_post : function(device, notification_name) {
-        // TODO:
+        var command = util.format('xcrun simctl notify_post "%s" "%s"', device, notification_name);
+        return shell.exec(command);
     },
     
     icloud_sync : function(device) {
-        // TODO:
+        var command = util.format('xcrun simctl icloud_sync "%s"', device);
+        return shell.exec(command);
     },
     
     help : function(subcommand) {
-        // TODO:
+        var command = util.format('xcrun simctl help "%s"', subcommand);
+        return shell.exec(command);
     }
-
 };
