@@ -38,7 +38,7 @@ exports = module.exports = {
     
     check_prerequisites : function() {
         var command = util.format('xcrun simctl help');
-        var obj = shell.exec(command);
+        var obj = shell.exec(command, {silent: true});
 
         if (obj.code !== 0) {
             obj.output  = 'simctl was not found.\n';
@@ -145,13 +145,13 @@ exports = module.exports = {
         return shell.exec(command);
     },
     
-    list : function(show_devices, show_device_types, show_runtimes) {
+    list : function(options) {
         var sublist = '';
-        if (show_devices) {
+        if (options.devices) {
             sublist = 'devices';
-        } else if (show_device_types) {
-            sublist = 'device_types';
-        } else if (show_runtimes) {
+        } else if (options.devicetypes) {
+            sublist = 'devicetypes';
+        } else if (options.runtimes) {
             sublist = 'runtimes';
         }
         
