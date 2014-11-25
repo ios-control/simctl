@@ -4,7 +4,7 @@
   "description": "library for Xcode simctl utility on OS X",
   "repository": {
     "type": "git",
-    "url": "https://github.com/shazron/simctl.git"
+    "url": "https://github.com/phonegap/simctl.git"
   },
   "main": "simctl.js",
   "dependencies": {
