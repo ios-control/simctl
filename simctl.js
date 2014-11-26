@@ -25,7 +25,7 @@ THE SOFTWARE.
 var shell = require('shelljs'),
     path = require('path'),
     util = require('util'),
-    parser = require('./lib/simctl-list-parser');
+    SimCtlListParser = require('./lib/simctl-list-parser');
 
 exports = module.exports = {
     
@@ -162,7 +162,12 @@ exports = module.exports = {
         var obj = shell.exec(command);
 
         if (obj.code === 0) {
-            obj.json = parser.parse(obj.output);
+            try {
+                var parser = new SimCtlListParser();
+                obj.json = parser.parse(obj.output);
+            } catch(err) {
+                console.error(err.stack);
+            }
         }
 
         return obj;
