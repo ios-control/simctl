@@ -159,7 +159,7 @@ exports = module.exports = {
         }
         
         var command = util.format('xcrun simctl list %s', sublist);
-        var obj = shell.exec(command);
+        var obj = shell.exec(command, { silent: options.silent });
 
         if (obj.code === 0) {
             try {
