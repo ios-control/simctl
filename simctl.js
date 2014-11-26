@@ -24,7 +24,8 @@ THE SOFTWARE.
 
 var shell = require('shelljs'),
     path = require('path'),
-    util = require('util');
+    util = require('util'),
+    parser = require('./lib/simctl-list-parser');
 
 exports = module.exports = {
     
@@ -147,6 +148,8 @@ exports = module.exports = {
     
     list : function(options) {
         var sublist = '';
+        options = options || {};
+        
         if (options.devices) {
             sublist = 'devices';
         } else if (options.devicetypes) {
@@ -156,7 +159,13 @@ exports = module.exports = {
         }
         
         var command = util.format('xcrun simctl list %s', sublist);
-        return shell.exec(command);
+        var obj = shell.exec(command);
+
+        if (obj.code === 0) {
+            obj.json = parser.parse(obj.output);
+        }
+
+        return obj;
     },
     
     notify_post : function(device, notification_name) {
