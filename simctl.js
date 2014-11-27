@@ -27,6 +27,19 @@ var shell = require('shelljs'),
     util = require('util'),
     SimCtlListParser = require('./lib/simctl-list-parser');
 
+var extensions = {
+    start : function(devicename) {
+        if (!devicename) {
+            var command = 'open -a "iOS Simulator"';
+            return shell.exec(command, { silent: true } );
+        } else {
+            var command = util.format('xcrun instruments -w "%s"', devicename);
+            return shell.exec(command, { silent: true } );
+        }
+    }
+};
+
+
 exports = module.exports = {
     
     set noxpc(b) {
@@ -36,6 +49,8 @@ exports = module.exports = {
     get noxpc() {
         return this._noxpc;
     },
+    
+    extensions : extensions,
     
     check_prerequisites : function() {
         var command = util.format('xcrun simctl help');
