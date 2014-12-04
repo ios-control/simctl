@@ -1,6 +1,6 @@
 {
   "name": "simctl",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "library for Xcode simctl utility on OS X",
   "repository": {
     "type": "git",
@@ -8,7 +8,8 @@
   },
   "main": "simctl.js",
   "dependencies": {
-      "shelljs": "^0.2.6"
+      "shelljs": "^0.2.6",
+      "tail": "^0.4.0"
   },  
   "keywords": [
     "simctl",

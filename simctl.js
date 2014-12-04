@@ -25,19 +25,9 @@ THE SOFTWARE.
 var shell = require('shelljs'),
     path = require('path'),
     util = require('util'),
+    Tail = require('tail').Tail,
+    SimCtlExtensions = require('./lib/simctl-extensions'),
     SimCtlListParser = require('./lib/simctl-list-parser');
-
-var extensions = {
-    start : function(devicename) {
-        if (!devicename) {
-            var command = 'open -a "iOS Simulator"';
-            return shell.exec(command, { silent: true } );
-        } else {
-            var command = util.format('xcrun instruments -w "%s"', devicename);
-            return shell.exec(command, { silent: true } );
-        }
-    }
-};
 
 
 exports = module.exports = {
@@ -50,7 +40,7 @@ exports = module.exports = {
         return this._noxpc;
     },
     
-    extensions : extensions,
+    extensions : SimCtlExtensions,
     
     check_prerequisites : function() {
         var command = util.format('xcrun simctl help');
