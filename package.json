@@ -10,6 +10,19 @@
   "dependencies": {
       "shelljs": "^0.2.6",
       "tail": "^0.4.0"
+  },
+ "devDependencies": {
+    "jasmine-node": "^1.14.5",
+    "jscs": "^2.11.0",
+    "jshint": "^2.9.1"
+  },
+  "scripts": {
+    "test": "npm run jasmine",
+    "posttest": "npm run jshint",
+    "jshint": "jshint lib ./simctl.js",
+    "postjshint": "npm run jscs",
+    "jscs": "jscs lib ./simctl.js",
+    "jasmine": "jasmine-node --captureExceptions --color spec"
   },  
   "keywords": [
     "simctl",
