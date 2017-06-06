@@ -86,11 +86,13 @@ describe('list-parser device type tests', function() {
             'iPad Air (com.apple.CoreSimulator.SimDeviceType.iPad-Air)',
             'iPad Air 2 (com.apple.CoreSimulator.SimDeviceType.iPad-Air-2)',
             'iPad Pro (9.7-inch) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro--9-7-inch-)',
-            'iPad Pro (12.9-inch) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro)'
+            'iPad Pro (12.9-inch) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro)',
+            'iPad Pro (12.9-inch) (2nd generation) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro--12-9-inch---2nd-generation-)',
+            'iPad Pro (10.5-inch) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro--10-5-inch-)'
         ];
 
         var result = parser.parse(lines.join('\n'));
-        expect(result.devicetypes.length).toEqual(6);
+        expect(result.devicetypes.length).toEqual(8);
         expect(result.devices.length).toEqual(0);
         expect(result.runtimes.length).toEqual(0);
 
@@ -106,6 +108,10 @@ describe('list-parser device type tests', function() {
         expect(result.devicetypes[4].id).toEqual('com.apple.CoreSimulator.SimDeviceType.iPad-Pro--9-7-inch-');
         expect(result.devicetypes[5].name).toEqual('iPad Pro (12.9-inch)');
         expect(result.devicetypes[5].id).toEqual('com.apple.CoreSimulator.SimDeviceType.iPad-Pro');
+        expect(result.devicetypes[6].name).toEqual('iPad Pro (12.9-inch) (2nd generation)');
+        expect(result.devicetypes[6].id).toEqual('com.apple.CoreSimulator.SimDeviceType.iPad-Pro--12-9-inch---2nd-generation-');
+        expect(result.devicetypes[7].name).toEqual('iPad Pro (10.5-inch)');
+        expect(result.devicetypes[7].id).toEqual('com.apple.CoreSimulator.SimDeviceType.iPad-Pro--10-5-inch-');
     });
 
     it('test parse Apple Watches', function() {
@@ -227,6 +233,9 @@ describe('list-parser test Devices', function() {
             '    iPhone SE (175D9F25-0B08-4E4B-AD39-E3CBAC72CB4B) (Shutdown)',
             '    iPad Pro (9.7 inch) (1C5590C8-8AE7-4C27-AD06-84C801702945) (Shutdown)',
             '    iPad Pro (12.9 inch) (065BAEBF-1D7D-4B3B-B30D-79529356065B) (Shutdown)',
+            '-- iOS 11.0 --',
+            '    iPad Pro (12.9-inch) (2nd generation) (8C41DBA3-0F78-43FF-AE92-845D35DDD39D) (Shutdown)',
+            '    iPad Pro (10.5-inch) (1B4E1A98-2408-404A-BEFC-F723A6889A63) (Shutdown)',
             '-- tvOS 10.0 --',
             '    Apple TV 1080p (1A360376-E68E-45C2-8DBB-48BF7C60B4FB) (Shutdown)',
             '-- watchOS 3.0 --',
@@ -240,10 +249,10 @@ describe('list-parser test Devices', function() {
 
         var result = parser.parse(lines.join('\n'));
         expect(result.devicetypes.length).toEqual(0);
-        expect(result.devices.length).toEqual(6);
+        expect(result.devices.length).toEqual(7);
         expect(result.runtimes.length).toEqual(0);
 
-        var device = result.devices[0]; 
+        var device = result.devices[0];
         expect(device.runtime).toEqual('iOS 8.4');
         expect(device.devices[0].name).toEqual('Resizable iPad');
         expect(device.devices[0].id).toEqual('E7348A97-6719-476F-B5A9-0C7F32336F0B');
@@ -296,9 +305,20 @@ describe('list-parser test Devices', function() {
         expect(device.devices[6].state).toEqual('Shutdown');
         expect(device.devices[6].available).toEqual(true);
 
+        device = result.devices[3];
+        expect(device.runtime).toEqual('iOS 11.0');
+        expect(device.devices[0].name).toEqual('iPad Pro (12.9-inch) (2nd generation)');
+        expect(device.devices[0].id).toEqual('8C41DBA3-0F78-43FF-AE92-845D35DDD39D');
+        expect(device.devices[0].state).toEqual('Shutdown');
+        expect(device.devices[0].available).toEqual(true);
+        expect(device.devices[1].name).toEqual('iPad Pro (10.5-inch)');
+        expect(device.devices[1].id).toEqual('1B4E1A98-2408-404A-BEFC-F723A6889A63');
+        expect(device.devices[1].state).toEqual('Shutdown');
+        expect(device.devices[1].available).toEqual(true);
+
         // tvOS //////////
 
-        device = result.devices[3]; 
+        device = result.devices[4];
         expect(device.runtime).toEqual('tvOS 10.0');
         expect(device.devices[0].name).toEqual('Apple TV 1080p');
         expect(device.devices[0].id).toEqual('1A360376-E68E-45C2-8DBB-48BF7C60B4FB');
@@ -307,7 +327,7 @@ describe('list-parser test Devices', function() {
 
         // watchOS //////////
 
-        device = result.devices[4]; 
+        device = result.devices[5];
         expect(device.runtime).toEqual('watchOS 3.0');
         expect(device.devices[0].name).toEqual('Apple Watch - 38mm');
         expect(device.devices[0].id).toEqual('349DD23B-689C-43E4-A1F5-304C3E4DCFDD');
@@ -328,7 +348,7 @@ describe('list-parser test Devices', function() {
 
         // Unavailable //////////
 
-        device = result.devices[5]; 
+        device = result.devices[6];
         expect(device.runtime).toEqual('Unavailable: com.apple.CoreSimulator.SimRuntime.iOS-9-1');
         expect(device.devices[0].name).toEqual('iPhone 4s');
         expect(device.devices[0].id).toEqual('A27C69F5-1AFF-48D2-92B0-951F7E037E9C');
