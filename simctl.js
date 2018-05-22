@@ -47,9 +47,9 @@ exports = module.exports = {
         if (obj.code !== 0) {
             obj.output  = 'simctl was not found.\n';
             obj.output += 'Check that you have Xcode 8.x installed:\n';
-            obj.output += '\txcodebuild --version';
+            obj.output += '\txcodebuild --version\n';
             obj.output += 'Check that you have Xcode 8.x selected:\n';
-            obj.output += '\txcode-select --print-path';
+            obj.output += '\txcode-select --print-path\n';
         }
 
         return obj;
