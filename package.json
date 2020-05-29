@@ -8,7 +8,7 @@
   },
   "main": "simctl.js",
   "dependencies": {
-    "shelljs": "^0.2.6",
+    "shelljs": "^0.8.4",
     "tail": "^0.4.0"
   },
   "devDependencies": {
