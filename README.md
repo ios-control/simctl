@@ -1,5 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/4p87ytoudwh7g132/branch/master?svg=true)](https://ci.appveyor.com/project/shazron/simctl/branch/master)
-[![Build Status](https://travis-ci.org/phonegap/ios-sim.svg?branch=master)](https://travis-ci.org/phonegap/simctl)
+[![Build status](https://ci.appveyor.com/api/projects/status/0ffoydxknq0sx48i/branch/master?svg=true)](https://ci.appveyor.com/project/shazron/simctl/branch/master)
 
 ## library wrapper for Xcode's simctl utility on OS X
 
