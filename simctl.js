@@ -43,11 +43,11 @@ exports = module.exports = {
         var obj = shell.exec(command, {silent: true});
 
         if (obj.code !== 0) {
-            obj.output = 'simctl was not found.\n';
-            obj.output += 'Check that you have Xcode 8.x installed:\n';
-            obj.output += '\txcodebuild --version\n';
-            obj.output += 'Check that you have Xcode 8.x selected:\n';
-            obj.output += '\txcode-select --print-path\n';
+            obj.stdout = 'simctl was not found.\n';
+            obj.stdout += 'Check that you have Xcode 8.x installed:\n';
+            obj.stdout += '\txcodebuild --version\n';
+            obj.stdout += 'Check that you have Xcode 8.x selected:\n';
+            obj.stdout += '\txcode-select --print-path\n';
         }
 
         return obj;
@@ -168,7 +168,7 @@ exports = module.exports = {
 
         if (obj.code === 0) {
             try {
-                obj.json = JSON.parse(obj.output);
+                obj.json = JSON.parse(obj.stdout);
             } catch (err) {
                 console.error(err.stack);
             }
