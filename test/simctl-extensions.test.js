@@ -69,7 +69,6 @@ describe('start', () => {
     const retObj = SimCtlExtensions.start()
 
     expect(retObj).toEqual(undefined)
-    console.log(consoleError)
     expect(consoleError).toBeCalledWith('Could not get device list.')
   })
 
