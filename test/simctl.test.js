@@ -1,8 +1,7 @@
-
 /*
 The MIT License (MIT)
 
-Copyright (c) 2014 Shazron Abdullah.
+Copyright (c) 2022 Shazron Abdullah.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +24,15 @@ THE SOFTWARE.
 
 const simctl = require('../simctl')
 const SimCtlExtensions = require('../lib/simctl-extensions')
+const shell = require('shelljs')
+
+jest.mock('shelljs', () => ({
+  exec: jest.fn()
+}))
+
+beforeEach(() => {
+  shell.exec.mockReset()
+})
 
 test('exports', () => {
   expect(simctl.extensions).toEqual(SimCtlExtensions)
@@ -53,4 +61,19 @@ test('noxpc', () => {
   expect(simctl.noxpc).toEqual(true)
   expect(simctl._noxpc).toEqual(true)
   delete simctl._noxpc
+})
+
+test('check_prerequisites fail', () => {
+  shell.exec.mockReturnValue({ code: 1 })
+
+  const retObj = simctl.check_prerequisites()
+  expect(retObj.stdout).toBeDefined()
+  expect(retObj.stdout).toMatch('simctl was not found.')
+})
+
+test('check_prerequisites success', () => {
+  shell.exec.mockReturnValue({ code: 0 })
+
+  const retObj = simctl.check_prerequisites()
+  expect(retObj.stdout).not.toBeDefined()
 })

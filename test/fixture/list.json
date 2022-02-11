@@ -431,7 +431,7 @@
         "udid" : "C310CF39-B994-4323-8063-DF7F995F822C"
       },
       {
-        "state" : "Shutdown",
+        "state" : "Booted",
         "availability" : " (unavailable, runtime profile not found)",
         "name" : "iPad Air",
         "udid" : "5EFAC0B6-0583-48EA-BDC6-E80FBFF76116"
