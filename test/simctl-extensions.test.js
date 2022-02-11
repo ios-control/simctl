@@ -55,7 +55,7 @@ describe('start', () => {
 
   test('xcode version unparseable', () => {
     shell.exec
-      .mockReturnValue({ code: 0, output: 'Ycode version 0.2' })
+      .mockReturnValue({ code: 0, stdout: 'Ycode version 0.2' })
     const retObj = SimCtlExtensions.start()
 
     expect(retObj).toEqual(undefined)
@@ -64,7 +64,7 @@ describe('start', () => {
 
   test('could not get device list', () => {
     shell.exec
-      .mockReturnValueOnce({ code: 0, output: 'Xcode 13.2.1' }) // xcodebuild -version
+      .mockReturnValueOnce({ code: 0, stdout: 'Xcode 13.2.1' }) // xcodebuild -version
       .mockReturnValueOnce({ code: 1 }) // xcrun simctl list -j
     const retObj = SimCtlExtensions.start()
 
@@ -76,8 +76,8 @@ describe('start', () => {
   test('simulator already running', () => {
     const deviceId = '5EFAC0B6-0583-48EA-BDC6-E80FBFF76116' // iPad Air in testJson
     shell.exec
-      .mockReturnValueOnce({ code: 0, output: 'Xcode 13.2.1' }) // xcodebuild -version
-      .mockReturnValueOnce({ code: 0, output: JSON.stringify(testJson) }) // xcrun simctl list -j
+      .mockReturnValueOnce({ code: 0, stdout: 'Xcode 13.2.1' }) // xcodebuild -version
+      .mockReturnValueOnce({ code: 0, stdout: JSON.stringify(testJson) }) // xcrun simctl list -j
     const retObj = SimCtlExtensions.start(deviceId)
 
     expect(retObj).toEqual(undefined)
@@ -87,8 +87,8 @@ describe('start', () => {
   test('could not boot simulator', () => {
     const deviceId = 'C5227DFA-FE4F-4517-95D1-066C8AE65307' // iPad Air 2 in testJson
     shell.exec
-      .mockReturnValueOnce({ code: 0, output: 'Xcode 13.2.1' }) // xcodebuild -version
-      .mockReturnValueOnce({ code: 0, output: JSON.stringify(testJson) }) // xcrun simctl list -j
+      .mockReturnValueOnce({ code: 0, stdout: 'Xcode 13.2.1' }) // xcodebuild -version
+      .mockReturnValueOnce({ code: 0, stdout: JSON.stringify(testJson) }) // xcrun simctl list -j
       .mockReturnValueOnce({ code: 1 }) // xcrun simctl boot <deviceid>
     const retObj = SimCtlExtensions.start(deviceId)
 
@@ -99,8 +99,8 @@ describe('start', () => {
   test('successful start (Xcode >= 9)', () => {
     const deviceId = 'C5227DFA-FE4F-4517-95D1-066C8AE65307' // iPad Air 2 in testJson
     shell.exec
-      .mockReturnValueOnce({ code: 0, output: 'Xcode 13.2.1' }) // xcodebuild -version
-      .mockReturnValueOnce({ code: 0, output: JSON.stringify(testJson) }) // xcrun simctl list -j
+      .mockReturnValueOnce({ code: 0, stdout: 'Xcode 13.2.1' }) // xcodebuild -version
+      .mockReturnValueOnce({ code: 0, stdout: JSON.stringify(testJson) }) // xcrun simctl list -j
       .mockReturnValueOnce({ code: 0 }) // xcrun simctl boot <deviceid>
       .mockReturnValueOnce({ code: 0 }) // open `xcode-select -p`/Applications/Simulator.app
     const retObj = SimCtlExtensions.start(deviceId)
@@ -112,7 +112,7 @@ describe('start', () => {
   test('successful start (Xcode < 9)', () => {
     const deviceId = 'C5227DFA-FE4F-4517-95D1-066C8AE65307' // iPad Air 2 in testJson
     shell.exec
-      .mockReturnValueOnce({ code: 0, output: 'Xcode 8' }) // xcodebuild -version
+      .mockReturnValueOnce({ code: 0, stdout: 'Xcode 8' }) // xcodebuild -version
       .mockReturnValueOnce({ code: 0 }) // xcrun instruments -w "%s"
     const retObj = SimCtlExtensions.start(deviceId)
 
