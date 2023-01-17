@@ -40,7 +40,7 @@ exports = module.exports = {
 
   check_prerequisites: function () {
     const command = util.format('xcrun simctl help')
-    const obj = shell.exec(command, {silent: true})
+    const obj = shell.exec(command, { silent: true })
 
     if (obj.code !== 0) {
       obj.stdout = 'simctl was not found.\n'
