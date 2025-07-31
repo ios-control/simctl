@@ -23,8 +23,11 @@ THE SOFTWARE.
 */
 
 const shell = require('shelljs')
-const util = require('util')
 const SimCtlExtensions = require('./lib/simctl-extensions')
+
+const escapeShellArg = function (arg) {
+  return typeof arg === 'string' ? arg.replace(/(["`])/g, '\\$1') : arg;
+}
 
 exports = module.exports = {
 
@@ -39,7 +42,7 @@ exports = module.exports = {
   extensions: SimCtlExtensions,
 
   check_prerequisites: function () {
-    const command = util.format('xcrun simctl help')
+    const command = `xcrun simctl help`
     const obj = shell.exec(command, { silent: true })
 
     if (obj.code !== 0) {
@@ -54,57 +57,57 @@ exports = module.exports = {
   },
 
   create: function (name, deviceTypeId, runtimeId) {
-    const command = util.format('xcrun simctl create "%s" "%s" "%s"', name, deviceTypeId, runtimeId)
+    const command = `xcrun simctl create "${escapeShellArg(name)}" "${escapeShellArg(deviceTypeId)}" "${escapeShellArg(runtimeId)}"`;
     return shell.exec(command)
   },
 
   del: function (device) {
-    const command = util.format('xcrun simctl delete "%s"', device)
+    const command = `xcrun simctl delete "${escapeShellArg(device)}"`
     return shell.exec(command)
   },
 
   erase: function (device) {
-    const command = util.format('xcrun simctl erase "%s"', device)
+    const command = `xcrun simctl erase "${escapeShellArg(device)}"`
     return shell.exec(command)
   },
 
   boot: function (device) {
-    const command = util.format('xcrun simctl boot "%s"', device)
+    const command = `xcrun simctl boot "${escapeShellArg(device)}"`
     return shell.exec(command)
   },
 
   shutdown: function (device) {
-    const command = util.format('xcrun simctl shutdown "%s"', device)
+    const command = `xcrun simctl shutdown "${escapeShellArg(device)}"`
     return shell.exec(command)
   },
 
   rename: function (device, name) {
-    const command = util.format('xcrun simctl rename "%s" "%s"', device, name)
+    const command = `xcrun simctl rename "${escapeShellArg(device)}" "${escapeShellArg(name)}"`
     return shell.exec(command)
   },
 
   getenv: function (device, variableName) {
-    const command = util.format('xcrun simctl getenv "%s" "%s"', device, variableName)
+    const command = `xcrun simctl getenv "${escapeShellArg(device)}" "${escapeShellArg(variableName)}"`
     return shell.exec(command)
   },
 
   openurl: function (device, url) {
-    const command = util.format('xcrun simctl openurl "%s" "%s"', device, url)
+    const command = `xcrun simctl openurl "${escapeShellArg(device)}" "${escapeShellArg(url)}"`
     return shell.exec(command)
   },
 
   addphoto: function (device, path) {
-    const command = util.format('xcrun simctl addphoto "%s" "%s"', device, path)
+    const command = `xcrun simctl addphoto "${escapeShellArg(device)}" "${escapeShellArg(path)}"`
     return shell.exec(command)
   },
 
   install: function (device, path) {
-    const command = util.format('xcrun simctl install "%s" "%s"', device, path)
+    const command = `xcrun simctl install "${escapeShellArg(device)}" "${escapeShellArg(path)}"`
     return shell.exec(command)
   },
 
   uninstall: function (device, appIdentifier) {
-    const command = util.format('xcrun simctl uninstall "%s" "%s"', device, appIdentifier)
+    const command = `xcrun simctl uninstall "${escapeShellArg(device)}" "${escapeShellArg(appIdentifier)}"`
     return shell.exec(command)
   },
 
@@ -121,8 +124,7 @@ exports = module.exports = {
       }).join(' ')
     }
 
-    const command = util.format('xcrun simctl launch %s "%s" "%s" %s',
-      waitFlag, device, appIdentifier, argvExpanded)
+    const command = `xcrun simctl launch ${waitFlag} "${escapeShellArg(device)}" "${escapeShellArg(appIdentifier)}" ${argvExpanded}`;
     return shell.exec(command)
   },
 
@@ -134,7 +136,7 @@ exports = module.exports = {
 
     let archFlag = ''
     if (arch) {
-      archFlag = util.format('--arch="%s"', arch)
+      archFlag = `--arch="${escapeShellArg(arch)}"', `
     }
 
     let argvExpanded = ''
@@ -144,8 +146,7 @@ exports = module.exports = {
       }).join(' ')
     }
 
-    const command = util.format('xcrun simctl spawn %s %s "%s" "%s" %s',
-      waitFlag, archFlag, device, pathToExecutable, argvExpanded)
+    const command = `xcrun simctl spawn ${waitFlag} ${archFlag} "${escapeShellArg(device)}" "${escapeShellArg(pathToExecutable)}" ${argvExpanded}`;
     return shell.exec(command)
   },
 
@@ -163,7 +164,7 @@ exports = module.exports = {
       sublist = 'pairs'
     }
 
-    const command = util.format('xcrun simctl list %s --json', sublist)
+    const command = `xcrun simctl list ${sublist} --json`
     const obj = shell.exec(command, { silent: options.silent })
 
     if (obj.code === 0) {
@@ -178,17 +179,17 @@ exports = module.exports = {
   },
 
   notify_post: function (device, notificationName) {
-    const command = util.format('xcrun simctl notify_post "%s" "%s"', device, notificationName)
+    const command = `xcrun simctl notify_post "${escapeShellArg(device)}" "${escapeShellArg(notificationName)}"}`;
     return shell.exec(command)
   },
 
   icloud_sync: function (device) {
-    const command = util.format('xcrun simctl icloud_sync "%s"', device)
+    const command = `xcrun simctl icloud_sync "${escapeShellArg(device)}"`
     return shell.exec(command)
   },
 
   help: function (subcommand) {
-    const command = util.format('xcrun simctl help "%s"', subcommand)
+    const command = `xcrun simctl help "${escapeShellArg(subcommand)}"`
     return shell.exec(command)
   }
 }
