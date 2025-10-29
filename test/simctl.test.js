@@ -24,14 +24,14 @@ THE SOFTWARE.
 
 const simctl = require('../simctl')
 const SimCtlExtensions = require('../lib/simctl-extensions')
-const shell = require('shelljs')
+const childProcess = require('child_process')
 
-jest.mock('shelljs', () => ({
-  exec: jest.fn()
+jest.mock('child_process', () => ({
+  spawnSync: jest.fn()
 }))
 
 beforeEach(() => {
-  shell.exec.mockReset()
+  childProcess.spawnSync.mockReset()
 })
 
 test('exports', () => {
@@ -55,16 +55,8 @@ test('exports', () => {
   expect(typeof simctl.help).toEqual('function')
 })
 
-test('noxpc', () => {
-  expect(simctl.noxpc).toEqual(undefined)
-  simctl.noxpc = true
-  expect(simctl.noxpc).toEqual(true)
-  expect(simctl._noxpc).toEqual(true)
-  delete simctl._noxpc
-})
-
 test('check_prerequisites fail', () => {
-  shell.exec.mockReturnValue({ code: 1 })
+  childProcess.spawnSync.mockReturnValue({ status: 1 })
 
   const retObj = simctl.check_prerequisites()
   expect(retObj.stdout).toBeDefined()
@@ -72,7 +64,7 @@ test('check_prerequisites fail', () => {
 })
 
 test('check_prerequisites success', () => {
-  shell.exec.mockReturnValue({ code: 0 })
+  childProcess.spawnSync.mockReturnValue({ status: 0 })
 
   const retObj = simctl.check_prerequisites()
   expect(retObj.stdout).not.toBeDefined()

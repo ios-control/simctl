@@ -22,131 +22,98 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-const shell = require('shelljs')
-const util = require('util')
+const { spawnSync } = require('child_process')
 const SimCtlExtensions = require('./lib/simctl-extensions')
 
 exports = module.exports = {
-
-  set noxpc (b) {
-    this._noxpc = b
-  },
-
-  get noxpc () {
-    return this._noxpc
-  },
-
   extensions: SimCtlExtensions,
 
   check_prerequisites: function () {
-    const command = util.format('xcrun simctl help')
-    const obj = shell.exec(command, { silent: true })
+    const result = spawnSync('xcrun', ['simctl', 'help'], { stdio: 'ignore' })
 
-    if (obj.code !== 0) {
-      obj.stdout = 'simctl was not found.\n'
-      obj.stdout += 'Check that you have Xcode 8.x installed:\n'
-      obj.stdout += '\txcodebuild --version\n'
-      obj.stdout += 'Check that you have Xcode 8.x selected:\n'
-      obj.stdout += '\txcode-select --print-path\n'
+    if (result.status !== 0) {
+      result.stdout = 'simctl was not found.\n'
+      result.stdout += 'Check that you have Xcode installed:\n'
+      result.stdout += '\txcodebuild --version\n'
+      result.stdout += 'Check that you have Xcode selected:\n'
+      result.stdout += '\txcode-select --print-path\n'
     }
 
-    return obj
+    return result
   },
 
   create: function (name, deviceTypeId, runtimeId) {
-    const command = util.format('xcrun simctl create "%s" "%s" "%s"', name, deviceTypeId, runtimeId)
-    return shell.exec(command)
+    return spawnSync('xcrun', ['simctl', 'create', name, deviceTypeId, runtimeId])
   },
 
   del: function (device) {
-    const command = util.format('xcrun simctl delete "%s"', device)
-    return shell.exec(command)
+    return spawnSync('xcrun', ['simctl', 'delete', device])
   },
 
   erase: function (device) {
-    const command = util.format('xcrun simctl erase "%s"', device)
-    return shell.exec(command)
+    return spawnSync('xcrun', ['simctl', 'erase', device])
   },
 
   boot: function (device) {
-    const command = util.format('xcrun simctl boot "%s"', device)
-    return shell.exec(command)
+    return spawnSync('xcrun', ['simctl', 'boot', device])
   },
 
   shutdown: function (device) {
-    const command = util.format('xcrun simctl shutdown "%s"', device)
-    return shell.exec(command)
+    return spawnSync('xcrun', ['simctl', 'shutdown', device])
   },
 
   rename: function (device, name) {
-    const command = util.format('xcrun simctl rename "%s" "%s"', device, name)
-    return shell.exec(command)
+    return spawnSync('xcrun', ['simctl', 'rename', device, name])
   },
 
   getenv: function (device, variableName) {
-    const command = util.format('xcrun simctl getenv "%s" "%s"', device, variableName)
-    return shell.exec(command)
+    return spawnSync('xcrun', ['simctl', 'getenv', device, variableName])
   },
 
   openurl: function (device, url) {
-    const command = util.format('xcrun simctl openurl "%s" "%s"', device, url)
-    return shell.exec(command)
+    return spawnSync('xcrun', ['simctl', 'openurl', device, url])
   },
 
   addphoto: function (device, path) {
-    const command = util.format('xcrun simctl addphoto "%s" "%s"', device, path)
-    return shell.exec(command)
+    return spawnSync('xcrun', ['simctl', 'addphoto', device, path])
   },
 
   install: function (device, path) {
-    const command = util.format('xcrun simctl install "%s" "%s"', device, path)
-    return shell.exec(command)
+    return spawnSync('xcrun', ['simctl', 'install', device, path])
   },
 
   uninstall: function (device, appIdentifier) {
-    const command = util.format('xcrun simctl uninstall "%s" "%s"', device, appIdentifier)
-    return shell.exec(command)
+    return spawnSync('xcrun', ['simctl', 'uninstall', device, appIdentifier])
   },
 
   launch: function (waitForDebugger, device, appIdentifier, argv) {
-    let waitFlag = ''
+    const args = ['simctl', 'launch']
+
     if (waitForDebugger) {
-      waitFlag = '--wait-for-debugger'
+      args.push('--wait-for-debugger')
     }
 
-    let argvExpanded = ''
-    if (argv.length > 0) {
-      argvExpanded = argv.map(function (arg) {
-        return '\'' + arg + '\''
-      }).join(' ')
-    }
+    args.push(device)
+    args.push(appIdentifier)
 
-    const command = util.format('xcrun simctl launch %s "%s" "%s" %s',
-      waitFlag, device, appIdentifier, argvExpanded)
-    return shell.exec(command)
+    return spawnSync('xcrun', args.concat(argv))
   },
 
   spawn: function (waitForDebugger, arch, device, pathToExecutable, argv) {
-    let waitFlag = ''
+    const args = ['simctl', 'spawn']
+
     if (waitForDebugger) {
-      waitFlag = '--wait-for-debugger'
+      args.push('--wait-for-debugger')
     }
 
-    let archFlag = ''
     if (arch) {
-      archFlag = util.format('--arch="%s"', arch)
+      args.push(`--arch="${arch}"`)
     }
 
-    let argvExpanded = ''
-    if (argv.length > 0) {
-      argvExpanded = argv.map(function (arg) {
-        return '\'' + arg + '\''
-      }).join(' ')
-    }
+    args.push(device)
+    args.push(pathToExecutable)
 
-    const command = util.format('xcrun simctl spawn %s %s "%s" "%s" %s',
-      waitFlag, archFlag, device, pathToExecutable, argvExpanded)
-    return shell.exec(command)
+    return spawnSync('xcrun', args.concat(argv))
   },
 
   list: function (options) {
@@ -163,32 +130,32 @@ exports = module.exports = {
       sublist = 'pairs'
     }
 
-    const command = util.format('xcrun simctl list %s --json', sublist)
-    const obj = shell.exec(command, { silent: options.silent })
+    const result = spawnSync('xcrun', ['simctl', 'list', sublist, '--json'])
 
-    if (obj.code === 0) {
+    if (result.status === 0) {
       try {
-        obj.json = JSON.parse(obj.stdout)
+        result.json = JSON.parse(result.stdout)
       } catch (err) {
         console.error(err.stack)
       }
     }
 
-    return obj
+    return result
   },
 
   notify_post: function (device, notificationName) {
-    const command = util.format('xcrun simctl notify_post "%s" "%s"', device, notificationName)
-    return shell.exec(command)
+    return spawnSync('xcrun', ['simctl', 'notify_post', device, notificationName])
   },
 
   icloud_sync: function (device) {
-    const command = util.format('xcrun simctl icloud_sync "%s"', device)
-    return shell.exec(command)
+    return spawnSync('xcrun', ['simctl', 'icloud_sync', device])
   },
 
   help: function (subcommand) {
-    const command = util.format('xcrun simctl help "%s"', subcommand)
-    return shell.exec(command)
+    if (subcommand) {
+      return spawnSync('xcrun', ['simctl', 'help', subcommand])
+    } else {
+      return spawnSync('xcrun', ['simctl', 'help'])
+    }
   }
 }
