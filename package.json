@@ -23,5 +23,19 @@
   "license": "MIT",
   "devDependencies": {
     "@cordova/eslint-config": "^6.0.0"
+  },
+  "engines": {
+    "node": ">= 14.17.0"
+  },
+  "devEngines": {
+    "os": {
+      "name": "darwin",
+      "onFail": "warn"
+    },
+    "runtime": {
+      "name": "node",
+      "version": ">= 20.9.0",
+      "onFail": "error"
+    }
   }
 }
