@@ -10,24 +10,18 @@
   "dependencies": {
     "tail": "^2.2.6"
   },
-  "devDependencies": {
-    "eslint": "^8.32.0",
-    "eslint-config-semistandard": "^17.0.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jest": "^27.2.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.1.1"
-  },
   "scripts": {
     "test": "node --test",
     "posttest": "npm run eslint",
-    "eslint": "eslint lib ./simctl.js"
+    "eslint": "eslint ."
   },
   "keywords": [
     "simctl",
     "iOS Simulator"
   ],
   "author": "Shazron Abdullah",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@cordova/eslint-config": "^6.0.0"
+  }
 }

@@ -25,7 +25,7 @@ THE SOFTWARE.
 const test = require('node:test')
 const childProcess = require('child_process')
 
-const spawnMock = test.mock.method(childProcess, 'spawnSync');
+const spawnMock = test.mock.method(childProcess, 'spawnSync')
 
 const simctl = require('../simctl')
 const SimCtlExtensions = require('../lib/simctl-extensions')
@@ -58,20 +58,20 @@ test('check_prerequisites fail', (t) => {
 
   spawnMock.mock.mockImplementationOnce(() => {
     return { status: 1 }
-  });
+  })
 
   const retObj = simctl.check_prerequisites()
   t.assert.ok(retObj.stdout)
   t.assert.match(retObj.stdout, /simctl was not found./)
-});
+})
 
 test('check_prerequisites success', (t) => {
   t.assert ||= require('node:assert')
 
   spawnMock.mock.mockImplementationOnce(() => {
     return { status: 0 }
-  });
+  })
 
   const retObj = simctl.check_prerequisites()
   t.assert.equal(retObj.stdout, undefined)
-});
+})

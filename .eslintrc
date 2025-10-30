@@ -1,7 +1,0 @@
-{
-  "extends": "standard",
-  "plugins": ["jest"],
-  "env": {
-    "jest": true
-  }
-}
