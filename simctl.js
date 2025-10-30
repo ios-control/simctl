@@ -42,6 +42,22 @@ module.exports = {
     return result
   },
 
+  simctl_version: function () {
+    const res = spawnSync('xcrun', ['simctl', '--version'])
+    const versionMatch = /CoreSimulator-(.*)/.exec(res.stdout)
+    const versionString = versionMatch[1]
+
+    return versionString.split('.').map((v) => parseInt(v, 10))
+  },
+
+  xcode_version: function () {
+    const res = spawnSync('xcodebuild', ['-version'])
+    const versionMatch = /Xcode (.*)/.exec(res.stdout)
+    const versionString = versionMatch[1]
+
+    return versionString.split('.').map((v) => parseInt(v, 10))
+  },
+
   create: function (name, deviceTypeId, runtimeId) {
     return spawnSync('xcrun', ['simctl', 'create', name, deviceTypeId, runtimeId])
   },

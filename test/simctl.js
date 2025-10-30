@@ -25,6 +25,7 @@ THE SOFTWARE.
 const test = require('node:test')
 const childProcess = require('child_process')
 
+const originalSpawnSync = childProcess.spawnSync
 const spawnMock = test.mock.method(childProcess, 'spawnSync')
 
 const simctl = require('../simctl')
@@ -35,6 +36,8 @@ test('exports', (t) => {
 
   t.assert.equal(simctl.extensions, SimCtlExtensions)
   t.assert.equal(typeof simctl.check_prerequisites, 'function')
+  t.assert.equal(typeof simctl.simctl_version, 'function')
+  t.assert.equal(typeof simctl.xcode_version, 'function')
   t.assert.equal(typeof simctl.create, 'function')
   t.assert.equal(typeof simctl.del, 'function')
   t.assert.equal(typeof simctl.erase, 'function')
@@ -74,4 +77,26 @@ test('check_prerequisites success', (t) => {
 
   const retObj = simctl.check_prerequisites()
   t.assert.equal(retObj.stdout, undefined)
+})
+
+test('xcode version', (t) => {
+  t.assert ||= require('node:assert')
+
+  spawnMock.mock.mockImplementationOnce((...args) => {
+    return originalSpawnSync.call(childProcess, ...args)
+  })
+
+  const retObj = simctl.xcode_version()
+  t.assert.ok(retObj[0] >= 8)
+})
+
+test('simctl version', (t) => {
+  t.assert ||= require('node:assert')
+
+  spawnMock.mock.mockImplementationOnce((...args) => {
+    return originalSpawnSync.call(childProcess, ...args)
+  })
+
+  const retObj = simctl.simctl_version()
+  t.assert.ok(retObj[0] >= 400)
 })
