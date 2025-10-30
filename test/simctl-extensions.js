@@ -25,7 +25,7 @@ THE SOFTWARE.
 const test = require('node:test')
 const childProcess = require('child_process')
 
-const spawnMock = test.mock.method(childProcess, 'spawnSync');
+const spawnMock = test.mock.method(childProcess, 'spawnSync')
 
 const SimCtlExtensions = require('../lib/simctl-extensions')
 
@@ -44,7 +44,7 @@ test('start', async (ctx) => {
     spawnMock.mock.resetCalls()
 
     t.mock.method(console, 'error', () => {})
-  });
+  })
 
   await ctx.test('xcodebuild not found', (t) => {
     t.assert ||= require('node:assert')
@@ -64,7 +64,7 @@ test('start', async (ctx) => {
     const retObj = SimCtlExtensions.start()
     t.assert.equal(retObj, undefined)
     t.assert.equal(console.error.mock.calls[0].arguments[0], 'Unable to parse xcodebuild version.')
-  });
+  })
 
   await ctx.test('could not get device list', (t) => {
     t.assert ||= require('node:assert')
@@ -75,7 +75,7 @@ test('start', async (ctx) => {
     const retObj = SimCtlExtensions.start()
     t.assert.equal(retObj, undefined)
     t.assert.equal(console.error.mock.calls[0].arguments[0], 'Could not get device list.')
-  });
+  })
 
   await ctx.test('simulator already running', (t) => {
     t.assert ||= require('node:assert')
@@ -86,7 +86,7 @@ test('start', async (ctx) => {
     const retObj = SimCtlExtensions.start('5EFAC0B6-0583-48EA-BDC6-E80FBFF76116')
     t.assert.equal(retObj, undefined)
     t.assert.equal(console.error.mock.calls[0].arguments[0], 'Simulator already running.')
-  });
+  })
 
   await ctx.test('could not boot simulator', (t) => {
     t.assert ||= require('node:assert')
@@ -98,7 +98,7 @@ test('start', async (ctx) => {
     const retObj = SimCtlExtensions.start(deviceId)
     t.assert.equal(retObj, undefined)
     t.assert.equal(console.error.mock.calls[0].arguments[0], `Could not boot simulator ${deviceId}`)
-  });
+  })
 
   await ctx.test('successful start (Xcode >= 9)', (t) => {
     t.assert ||= require('node:assert')
@@ -112,7 +112,7 @@ test('start', async (ctx) => {
     const retObj = SimCtlExtensions.start(deviceId)
     t.assert.deepEqual(retObj, { status: 0 })
     t.assert.equal(console.error.mock.calls.length, 0)
-  });
+  })
 
   await ctx.test('successful start (Xcode < 9)', (t) => {
     t.assert ||= require('node:assert')
@@ -123,5 +123,5 @@ test('start', async (ctx) => {
     const retObj = SimCtlExtensions.start(deviceId)
     t.assert.deepEqual(retObj, { status: 0 })
     t.assert.equal(console.error.mock.calls.length, 0)
-  });
-});
+  })
+})
