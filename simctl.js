@@ -25,7 +25,7 @@ THE SOFTWARE.
 const { spawnSync } = require('child_process')
 const SimCtlExtensions = require('./lib/simctl-extensions')
 
-exports = module.exports = {
+module.exports = {
   extensions: SimCtlExtensions,
 
   check_prerequisites: function () {
