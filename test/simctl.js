@@ -180,3 +180,31 @@ test('simctl list', async (ctx) => {
     t.assert.equal(retObj.json, undefined)
   })
 })
+
+test('simctl help', async (ctx) => {
+  ctx.beforeEach((t) => {
+    spawnMock.mock.resetCalls()
+  })
+
+  await ctx.test('with no arguments', (t) => {
+    t.assert ||= require('node:assert')
+
+    spawnMock.mock.mockImplementationOnce(() => {
+      return { status: 0, stdout: '' }
+    })
+
+    simctl.help()
+    t.assert.deepEqual(spawnMock.mock.calls[0].arguments[1], ['simctl', 'help'])
+  })
+
+  await ctx.test('with a subcommand', (t) => {
+    t.assert ||= require('node:assert')
+
+    spawnMock.mock.mockImplementationOnce(() => {
+      return { status: 0, stdout: '' }
+    })
+
+    simctl.help('launch')
+    t.assert.deepEqual(spawnMock.mock.calls[0].arguments[1], ['simctl', 'help', 'launch'])
+  })
+})
