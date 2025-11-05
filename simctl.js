@@ -133,20 +133,20 @@ module.exports = {
   },
 
   list: function (options) {
-    let sublist = ''
+    const sublist = []
     options = options || {}
 
     if (options.devices) {
-      sublist = 'devices'
+      sublist.push('devices')
     } else if (options.devicetypes) {
-      sublist = 'devicetypes'
+      sublist.push('devicetypes')
     } else if (options.runtimes) {
-      sublist = 'runtimes'
+      sublist.push('runtimes')
     } else if (options.pairs) {
-      sublist = 'pairs'
+      sublist.push('pairs')
     }
 
-    const result = spawnSync('xcrun', ['simctl', 'list', sublist, '--json'])
+    const result = spawnSync('xcrun', ['simctl', 'list'].concat(sublist, ['--json']))
 
     if (result.status === 0) {
       try {

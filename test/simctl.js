@@ -100,3 +100,83 @@ test('simctl version', (t) => {
   const retObj = simctl.simctl_version()
   t.assert.ok(retObj[0] >= 400)
 })
+
+test('simctl list', async (ctx) => {
+  ctx.beforeEach((t) => {
+    spawnMock.mock.resetCalls()
+
+    t.mock.method(console, 'error', () => {})
+  })
+
+  await ctx.test('with no arguments', (t) => {
+    t.assert ||= require('node:assert')
+
+    spawnMock.mock.mockImplementationOnce(() => {
+      return { status: 0, stdout: '{}' }
+    })
+
+    const retObj = simctl.list()
+    t.assert.deepEqual(spawnMock.mock.calls[0].arguments[1], ['simctl', 'list', '--json'])
+    t.assert.deepEqual(retObj.json, {})
+  })
+
+  await ctx.test('with devices arguments', (t) => {
+    t.assert ||= require('node:assert')
+
+    spawnMock.mock.mockImplementationOnce(() => {
+      return { status: 0, stdout: '{}' }
+    })
+
+    const retObj = simctl.list({ devices: true })
+    t.assert.deepEqual(spawnMock.mock.calls[0].arguments[1], ['simctl', 'list', 'devices', '--json'])
+    t.assert.deepEqual(retObj.json, {})
+  })
+
+  await ctx.test('with devicetypes arguments', (t) => {
+    t.assert ||= require('node:assert')
+
+    spawnMock.mock.mockImplementationOnce(() => {
+      return { status: 0, stdout: '{}' }
+    })
+
+    const retObj = simctl.list({ devicetypes: true })
+    t.assert.deepEqual(spawnMock.mock.calls[0].arguments[1], ['simctl', 'list', 'devicetypes', '--json'])
+    t.assert.deepEqual(retObj.json, {})
+  })
+
+  await ctx.test('with runtimes arguments', (t) => {
+    t.assert ||= require('node:assert')
+
+    spawnMock.mock.mockImplementationOnce(() => {
+      return { status: 0, stdout: '{}' }
+    })
+
+    const retObj = simctl.list({ runtimes: true })
+    t.assert.deepEqual(spawnMock.mock.calls[0].arguments[1], ['simctl', 'list', 'runtimes', '--json'])
+    t.assert.deepEqual(retObj.json, {})
+  })
+
+  await ctx.test('with pairs arguments', (t) => {
+    t.assert ||= require('node:assert')
+
+    spawnMock.mock.mockImplementationOnce(() => {
+      return { status: 0, stdout: '{}' }
+    })
+
+    const retObj = simctl.list({ pairs: true })
+    t.assert.deepEqual(spawnMock.mock.calls[0].arguments[1], ['simctl', 'list', 'pairs', '--json'])
+    t.assert.deepEqual(retObj.json, {})
+  })
+
+  await ctx.test('with parsing error', (t) => {
+    t.assert ||= require('node:assert')
+
+    spawnMock.mock.mockImplementationOnce(() => {
+      return { status: 0, stdout: 'This is not valid JSON' }
+    })
+
+    const retObj = simctl.list()
+    t.assert.match(console.error.mock.calls[0].arguments[0], /SyntaxError: Unexpected token/)
+    t.assert.equal(retObj.json, undefined)
+  })
+})
