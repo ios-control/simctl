@@ -18,10 +18,8 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
+          node-version: lts/*
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Install latest npm
-        run: npm install -g npm@latest
 
       - name: npm install
         run: npm ci
