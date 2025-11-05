@@ -100,6 +100,19 @@ test('start', async (ctx) => {
     t.assert.equal(console.error.mock.calls[0].arguments[0], `Could not boot simulator ${deviceId}`)
   })
 
+  await ctx.test('could not get Xcode path', (t) => {
+    t.assert ||= require('node:assert')
+
+    spawnMock.mock.mockImplementationOnce(() => ({ status: 0, stdout: 'Xcode 13.2.1' }), 0) // xcodebuild -version
+    spawnMock.mock.mockImplementationOnce(() => ({ status: 0, stdout: JSON.stringify(testJson) }), 1) // xcrun simctl list -j
+    spawnMock.mock.mockImplementationOnce(() => ({ status: 0 }), 2) // xcrun simctl boot <deviceid>
+    spawnMock.mock.mockImplementationOnce(() => ({ status: 1 }), 3) // xcode-select -p
+
+    const retObj = SimCtlExtensions.start(deviceId)
+    t.assert.equal(retObj, undefined)
+    t.assert.equal(console.error.mock.calls[0].arguments[0], 'Failed to get Xcode path')
+  })
+
   await ctx.test('successful start (Xcode >= 9)', (t) => {
     t.assert ||= require('node:assert')
 
