@@ -119,12 +119,13 @@ test('start', async (ctx) => {
     spawnMock.mock.mockImplementationOnce(() => ({ status: 0, stdout: 'Xcode 13.2.1' }), 0) // xcodebuild -version
     spawnMock.mock.mockImplementationOnce(() => ({ status: 0, stdout: JSON.stringify(testJson) }), 1) // xcrun simctl list -j
     spawnMock.mock.mockImplementationOnce(() => ({ status: 0 }), 2) // xcrun simctl boot <deviceid>
-    spawnMock.mock.mockImplementationOnce(() => ({ status: 0, stdout: '/Applications/Xcode.app/Contents/Developer' }), 3) // xcode-select -p
+    spawnMock.mock.mockImplementationOnce(() => ({ status: 0, stdout: '/Applications/Xcode.app/Contents/Developer\n' }), 3) // xcode-select -p
     spawnMock.mock.mockImplementationOnce(() => ({ status: 0 }), 4) // open -a XCODEPATH/Applications/Simulator.app
 
     const retObj = SimCtlExtensions.start(deviceId)
     t.assert.deepEqual(retObj, { status: 0 })
     t.assert.equal(console.error.mock.calls.length, 0)
+    t.assert.deepEqual(spawnMock.mock.calls[4].arguments[1], ['-a', '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app'])
   })
 
   await ctx.test('successful start (Xcode < 9)', (t) => {
