@@ -125,21 +125,21 @@ module.exports = {
     return spawnSync('xcrun', args)
   },
 
-  spawn: function (waitForDebugger, arch, device, pathToExecutable, argv) {
+  spawn: function (device, pathToExecutable, argv = [], options = {}) {
     const args = ['simctl', 'spawn']
 
-    if (waitForDebugger) {
+    if (options.waitForDebugger) {
       args.push('--wait-for-debugger')
     }
-
-    if (arch) {
-      args.push(`--arch="${arch}"`)
+    if (options.arch) {
+      args.push(`--arch=${options.arch}`)
     }
 
     args.push(device)
     args.push(pathToExecutable)
+    args.push(...argv)
 
-    return spawnSync('xcrun', args.concat(argv))
+    return spawnSync('xcrun', args)
   },
 
   list: function (options) {
