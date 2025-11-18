@@ -54,6 +54,8 @@ test('exports', (t) => {
   t.assert.equal(typeof simctl.icloud_sync, 'function')
   t.assert.equal(typeof simctl.create, 'function')
   t.assert.equal(typeof simctl.help, 'function')
+  t.assert.equal(typeof simctl.pair, 'function')
+  t.assert.equal(typeof simctl.unpair, 'function')
 })
 
 test('check_prerequisites fail', (t) => {
@@ -206,5 +208,61 @@ test('simctl help', async (ctx) => {
 
     simctl.help('launch')
     t.assert.deepEqual(spawnMock.mock.calls[0].arguments[1], ['simctl', 'help', 'launch'])
+  })
+})
+
+test('simctl pair', async (ctx) => {
+  ctx.beforeEach((t) => {
+    spawnMock.mock.resetCalls()
+  })
+
+  await ctx.test('with no arguments', (t) => {
+    t.assert ||= require('node:assert')
+
+    spawnMock.mock.mockImplementationOnce(() => {
+      return { status: 0, stdout: '' }
+    })
+
+    simctl.pair()
+    t.assert.deepEqual(spawnMock.mock.calls[0].arguments[1], ['simctl', 'pair', undefined, undefined])
+  })
+
+  await ctx.test('with fake watchDevice & phoneDevice', (t) => {
+    t.assert ||= require('node:assert')
+
+    spawnMock.mock.mockImplementationOnce(() => {
+      return { status: 0, stdout: '' }
+    })
+
+    simctl.pair('foobarWatch', 'foobarPhone')
+    t.assert.deepEqual(spawnMock.mock.calls[0].arguments[1], ['simctl', 'pair', 'foobarWatch', 'foobarPhone'])
+  })
+})
+
+test('simctl unpair', async (ctx) => {
+  ctx.beforeEach((t) => {
+    spawnMock.mock.resetCalls()
+  })
+
+  await ctx.test('with no arguments', (t) => {
+    t.assert ||= require('node:assert')
+
+    spawnMock.mock.mockImplementationOnce(() => {
+      return { status: 0, stdout: '' }
+    })
+
+    simctl.unpair()
+    t.assert.deepEqual(spawnMock.mock.calls[0].arguments[1], ['simctl', 'unpair', undefined])
+  })
+
+  await ctx.test('with fake deviceUUID', (t) => {
+    t.assert ||= require('node:assert')
+
+    spawnMock.mock.mockImplementationOnce(() => {
+      return { status: 0, stdout: '' }
+    })
+
+    simctl.unpair('foobar')
+    t.assert.deepEqual(spawnMock.mock.calls[0].arguments[1], ['simctl', 'unpair', 'foobar'])
   })
 })

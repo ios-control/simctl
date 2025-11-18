@@ -173,5 +173,13 @@ module.exports = {
     } else {
       return spawnSync('xcrun', ['simctl', 'help'])
     }
+  },
+
+  pair: function (watchDevice, phoneDevice) {
+    return spawnSync('xcrun', ['simctl', 'pair', watchDevice, phoneDevice])
+  },
+
+  unpair: function (pairUUID) {
+    return spawnSync('xcrun', ['simctl', 'unpair', pairUUID])
   }
 }
