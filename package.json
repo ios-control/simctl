@@ -7,9 +7,6 @@
     "url": "https://github.com/ios-control/simctl.git"
   },
   "main": "simctl.js",
-  "dependencies": {
-    "tail": "^2.2.6"
-  },
   "scripts": {
     "test": "node --test --experimental-test-coverage",
     "posttest": "npm run eslint",
