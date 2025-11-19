@@ -29,7 +29,7 @@ module.exports = {
   extensions: SimCtlExtensions,
 
   check_prerequisites: function () {
-    const result = spawnSync('xcrun', ['simctl', 'help'], { stdio: 'ignore' })
+    const result = spawnSync('xcrun', ['simctl', 'help'], { stdio: 'ignore', encoding: 'utf8' })
 
     if (result.status !== 0) {
       result.stdout = 'simctl was not found.\n'
@@ -43,7 +43,7 @@ module.exports = {
   },
 
   simctl_version: function () {
-    const res = spawnSync('xcrun', ['simctl', '--version'])
+    const res = spawnSync('xcrun', ['simctl', '--version'], { encoding: 'utf8' })
     const versionMatch = /CoreSimulator-(.*)/.exec(res.stdout)
     const versionString = versionMatch[1]
 
@@ -51,7 +51,7 @@ module.exports = {
   },
 
   xcode_version: function () {
-    const res = spawnSync('xcodebuild', ['-version'])
+    const res = spawnSync('xcodebuild', ['-version'], { encoding: 'utf8' })
     const versionMatch = /Xcode (.*)/.exec(res.stdout)
     const versionString = versionMatch[1]
 
@@ -59,47 +59,47 @@ module.exports = {
   },
 
   create: function (name, deviceTypeId, runtimeId) {
-    return spawnSync('xcrun', ['simctl', 'create', name, deviceTypeId, runtimeId])
+    return spawnSync('xcrun', ['simctl', 'create', name, deviceTypeId, runtimeId], { encoding: 'utf8' })
   },
 
   del: function (device) {
-    return spawnSync('xcrun', ['simctl', 'delete', device])
+    return spawnSync('xcrun', ['simctl', 'delete', device], { encoding: 'utf8' })
   },
 
   erase: function (device) {
-    return spawnSync('xcrun', ['simctl', 'erase', device])
+    return spawnSync('xcrun', ['simctl', 'erase', device], { encoding: 'utf8' })
   },
 
   boot: function (device) {
-    return spawnSync('xcrun', ['simctl', 'boot', device])
+    return spawnSync('xcrun', ['simctl', 'boot', device], { encoding: 'utf8' })
   },
 
   shutdown: function (device) {
-    return spawnSync('xcrun', ['simctl', 'shutdown', device])
+    return spawnSync('xcrun', ['simctl', 'shutdown', device], { encoding: 'utf8' })
   },
 
   rename: function (device, name) {
-    return spawnSync('xcrun', ['simctl', 'rename', device, name])
+    return spawnSync('xcrun', ['simctl', 'rename', device, name], { encoding: 'utf8' })
   },
 
   getenv: function (device, variableName) {
-    return spawnSync('xcrun', ['simctl', 'getenv', device, variableName])
+    return spawnSync('xcrun', ['simctl', 'getenv', device, variableName], { encoding: 'utf8' })
   },
 
   openurl: function (device, url) {
-    return spawnSync('xcrun', ['simctl', 'openurl', device, url])
+    return spawnSync('xcrun', ['simctl', 'openurl', device, url], { encoding: 'utf8' })
   },
 
   addphoto: function (device, path) {
-    return spawnSync('xcrun', ['simctl', 'addphoto', device, path])
+    return spawnSync('xcrun', ['simctl', 'addphoto', device, path], { encoding: 'utf8' })
   },
 
   install: function (device, path) {
-    return spawnSync('xcrun', ['simctl', 'install', device, path])
+    return spawnSync('xcrun', ['simctl', 'install', device, path], { encoding: 'utf8' })
   },
 
   uninstall: function (device, appIdentifier) {
-    return spawnSync('xcrun', ['simctl', 'uninstall', device, appIdentifier])
+    return spawnSync('xcrun', ['simctl', 'uninstall', device, appIdentifier], { encoding: 'utf8' })
   },
 
   launch: function (device, appIdentifier, argv = [], options = {}) {
@@ -122,7 +122,7 @@ module.exports = {
     args.push(appIdentifier)
     args.push(...argv)
 
-    return spawnSync('xcrun', args)
+    return spawnSync('xcrun', args, { encoding: 'utf8' })
   },
 
   spawn: function (device, pathToExecutable, argv = [], options = {}) {
@@ -139,7 +139,7 @@ module.exports = {
     args.push(pathToExecutable)
     args.push(...argv)
 
-    return spawnSync('xcrun', args)
+    return spawnSync('xcrun', args, { encoding: 'utf8' })
   },
 
   list: function (options) {
@@ -156,7 +156,7 @@ module.exports = {
       sublist.push('pairs')
     }
 
-    const result = spawnSync('xcrun', ['simctl', 'list'].concat(sublist, ['--json']))
+    const result = spawnSync('xcrun', ['simctl', 'list'].concat(sublist, ['--json']), { encoding: 'utf8' })
 
     if (result.status === 0) {
       try {
@@ -170,26 +170,26 @@ module.exports = {
   },
 
   notify_post: function (device, notificationName) {
-    return spawnSync('xcrun', ['simctl', 'notify_post', device, notificationName])
+    return spawnSync('xcrun', ['simctl', 'notify_post', device, notificationName], { encoding: 'utf8' })
   },
 
   icloud_sync: function (device) {
-    return spawnSync('xcrun', ['simctl', 'icloud_sync', device])
+    return spawnSync('xcrun', ['simctl', 'icloud_sync', device], { encoding: 'utf8' })
   },
 
   help: function (subcommand) {
     if (subcommand) {
-      return spawnSync('xcrun', ['simctl', 'help', subcommand])
+      return spawnSync('xcrun', ['simctl', 'help', subcommand], { encoding: 'utf8' })
     } else {
-      return spawnSync('xcrun', ['simctl', 'help'])
+      return spawnSync('xcrun', ['simctl', 'help'], { encoding: 'utf8' })
     }
   },
 
   pair: function (watchDevice, phoneDevice) {
-    return spawnSync('xcrun', ['simctl', 'pair', watchDevice, phoneDevice])
+    return spawnSync('xcrun', ['simctl', 'pair', watchDevice, phoneDevice], { encoding: 'utf8' })
   },
 
   unpair: function (pairUUID) {
-    return spawnSync('xcrun', ['simctl', 'unpair', pairUUID])
+    return spawnSync('xcrun', ['simctl', 'unpair', pairUUID], { encoding: 'utf8' })
   }
 }
