@@ -102,17 +102,27 @@ module.exports = {
     return spawnSync('xcrun', ['simctl', 'uninstall', device, appIdentifier])
   },
 
-  launch: function (waitForDebugger, device, appIdentifier, argv) {
+  launch: function (device, appIdentifier, argv = [], options = {}) {
     const args = ['simctl', 'launch']
 
-    if (waitForDebugger) {
+    if (options.waitForDebugger) {
       args.push('--wait-for-debugger')
+    }
+    if (options.stderr) {
+      args.push(`--stderr=${options.stderr}`)
+    }
+    if (options.stdout) {
+      args.push(`--stderr=${options.stdout}`)
+    }
+    if (options.arch) {
+      args.push(`--arch=${options.arch}`)
     }
 
     args.push(device)
     args.push(appIdentifier)
+    args.push(...argv)
 
-    return spawnSync('xcrun', args.concat(argv))
+    return spawnSync('xcrun', args)
   },
 
   spawn: function (waitForDebugger, arch, device, pathToExecutable, argv) {

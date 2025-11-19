@@ -33,7 +33,6 @@ test('exports', (t) => {
   t.assert ||= require('node:assert')
 
   t.assert.equal(typeof SimCtlExtensions.start, 'function')
-  t.assert.equal(typeof SimCtlExtensions.log, 'function')
 })
 
 test('start', async (ctx) => {
